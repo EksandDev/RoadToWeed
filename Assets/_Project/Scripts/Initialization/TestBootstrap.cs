@@ -1,5 +1,6 @@
-using System;
 using _Project.Scripts.Dialogues;
+using _Project.Scripts.Player;
+using _Project.Scripts.Quests;
 using UnityEngine;
 
 namespace _Project.Scripts.Initialization
@@ -8,13 +9,20 @@ namespace _Project.Scripts.Initialization
     {
         [SerializeField] private DialogueUI _dialogueUI;
         [SerializeField] private DialogueObject[] _dialogueObjects;
+        [SerializeField] private JobItem[] _jobItems;
         
         private void Start()
         {
+            LevelPlayerData levelPlayerData = new();
             _dialogueUI.Initialize(new());
+            Wallet wallet = new();
+            DialogueDependencies dialogueDependencies = new(_dialogueUI, levelPlayerData, wallet);
 
+            foreach (var jobItem in _jobItems)
+                jobItem.Initialize(levelPlayerData);
+            
             foreach (var dialogueObject in _dialogueObjects)
-                dialogueObject.Initialize(_dialogueUI);
+                dialogueObject.Initialize(dialogueDependencies);
         }
     }
 }

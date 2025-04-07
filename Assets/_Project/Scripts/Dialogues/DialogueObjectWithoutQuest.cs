@@ -10,9 +10,9 @@ namespace _Project.Scripts.Dialogues
         private bool _firstDialogueIsOut;
         private DialogueUI _dialogueUI;
 
-        public override void Initialize(DialogueUI dialogueUI)
+        public override void Initialize(DialogueDependencies dialogueDependencies)
         {
-            _dialogueUI = dialogueUI;
+            _dialogueUI = dialogueDependencies.DialogueUI;
         }
 
         public override void StartDialogue()

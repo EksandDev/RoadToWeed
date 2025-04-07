@@ -7,6 +7,5 @@ namespace _Project.Scripts.Dialogues
     {
         [field: SerializeField, TextArea(3, 6)] public string[] Text { get; private set; }
         [field: SerializeField] public string[] PlayerAnswers { get; private set; }
-        [field: SerializeField, TextArea(3, 6)] public string[] FinalText { get; private set; }
     }
 }
