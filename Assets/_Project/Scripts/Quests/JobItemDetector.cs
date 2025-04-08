@@ -6,24 +6,21 @@ namespace _Project.Scripts.Quests
     {
         [SerializeField] private Camera _camera;
         [SerializeField] private float _distance;
+
+        private RaycastHit _hit;
         
         private void Update()
         {
-            RaycastHit hit;
-
-            if (!Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, _distance, ~6)) 
+            if (!Physics.Raycast(_camera.transform.position, _camera.transform.forward, out _hit, _distance, ~6)) 
                 return;
 
-            if (!hit.transform.TryGetComponent(out JobItem jobItem)) 
+            if (!_hit.transform.TryGetComponent(out JobItem jobItem)) 
                 return;
             
-            if (!jobItem.CheckReadyToInteract())
+            if (jobItem.CheckReadyToInteract())
             {
-                //вывести сообщение
-                return;
+                //покрасить
             }
-
-            if (jobItem.CheckReadyToInteract()) {}
 
             if (!Input.GetKeyDown(KeyCode.E)) 
                 return;

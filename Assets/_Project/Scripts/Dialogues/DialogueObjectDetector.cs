@@ -6,18 +6,18 @@ namespace _Project.Scripts.Dialogues
     {
         [SerializeField] private Camera _camera;
         [SerializeField] private float _distance;
+        
+        private RaycastHit _hit;
 
         private void Update()
         {
-            RaycastHit hit;
-
             if (!Input.GetKeyDown(KeyCode.E))
                 return;
             
-            if (!Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, _distance, ~6)) 
+            if (!Physics.Raycast(_camera.transform.position, _camera.transform.forward, out _hit, _distance, ~6)) 
                 return;
             
-            if (hit.transform.TryGetComponent(out DialogueObject dialogueObject))
+            if (_hit.transform.TryGetComponent(out DialogueObject dialogueObject))
                 dialogueObject.StartDialogue();
         }
 

@@ -15,6 +15,18 @@ namespace _Project.Scripts.Quests
 
         public override void Interact()
         {
+            if (!LevelPlayerData.IsWorker)
+            {
+                NotificationSender.Send("Ты не работник.");
+                return;
+            }
+
+            if (LevelPlayerData.IsDoingJob)
+            {
+                NotificationSender.Send("Ты уже взял ящик.");
+                return;
+            }
+            
             LevelPlayerData.IsDoingJob = true;
             NotificationSender.Send("Ты взял ящик.");
         }

@@ -44,7 +44,7 @@ namespace _Project.Scripts.Dialogues
                     _levelPlayerData.IsWorker = false;
                     _jobIsDone = false;
                     _wallet.Money += 10;
-                    _notificationSender.Send("Ты выполнил свою работу.");
+                    _notificationSender.Send("Ты получил деньги.");
                     return;
                 default:
                     throw new InvalidOperationException();

@@ -7,7 +7,7 @@ namespace _Project.Scripts.Messages
     public class NotificationSender : MonoBehaviour
     {
         [SerializeField] private int _maxNotifications = 5;
-        [SerializeField] private float _notificationsLifeDuration = 7;
+        [SerializeField] private float _notificationsLifeDuration = 3;
         [SerializeField] private Notification _notificationPrefab;
 
         private Queue<Notification> _overMaxNotificationsQueue = new();
@@ -53,8 +53,8 @@ namespace _Project.Scripts.Messages
                 yield break;
             
             var waitingNotification = _overMaxNotificationsQueue.Dequeue();
-            InitializeNotification(waitingNotification);
             waitingNotification.gameObject.SetActive(true);
+            InitializeNotification(waitingNotification);
         }
     }
 }

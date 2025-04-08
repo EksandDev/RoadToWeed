@@ -27,8 +27,8 @@ namespace _Project.Scripts.Messages
 
         private IEnumerator DisappearCoroutine()
         {
-            yield return new WaitForSeconds(3);
-            _text.DOFade(0.1f, 4).SetLink(gameObject);
+            yield return new WaitForSeconds(1);
+            _text.DOFade(0.1f, 3).SetLink(gameObject);
         } 
     }
 }

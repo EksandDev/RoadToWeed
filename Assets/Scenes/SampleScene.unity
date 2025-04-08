@@ -1032,6 +1032,8 @@ GameObject:
   - component: {fileID: 572905884}
   - component: {fileID: 572905887}
   - component: {fileID: 572905888}
+  - component: {fileID: 572905889}
+  - component: {fileID: 572905890}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -1181,6 +1183,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _camera: {fileID: 330585545}
   _distance: 2
+--- !u!114 &572905889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 572905883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37fcad2e4974d76b26d088ecc8b162c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damage: 1
+  _distance: 3
+  _cooldown: 1
+  _camera: {fileID: 330585545}
+--- !u!114 &572905890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 572905883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acf60f99ba6b4d268579567981b36b2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <MaxHealth>k__BackingField: 10
 --- !u!1 &711586134
 GameObject:
   m_ObjectHideFlags: 0
@@ -2067,7 +2098,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxNotifications: 5
-  _notificationsLifeDuration: 8
+  _notificationsLifeDuration: 4
   _notificationPrefab: {fileID: 2184169288878088681, guid: 63e84b732db3fc5458039e0c261b9567,
     type: 3}
 --- !u!1 &1685585565
@@ -2331,6 +2362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebc614b777314864aff9c56f4cff57a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerHealth: {fileID: 2081446170}
   _dialogueUI: {fileID: 1073393453}
   _notificationSender: {fileID: 1619242896}
   _dialogueObjects:
@@ -2576,6 +2608,7 @@ GameObject:
   - component: {fileID: 2081446166}
   - component: {fileID: 2081446165}
   - component: {fileID: 2081446169}
+  - component: {fileID: 2081446170}
   m_Layer: 0
   m_Name: Employer
   m_TagString: Untagged
@@ -2690,6 +2723,19 @@ MonoBehaviour:
   _playerReceiveJobDialogue: {fileID: 11400000, guid: 91e215bf4bc55ae4a80e49e8bc9caae7,
     type: 2}
   _dropJobItem: {fileID: 1502007261}
+--- !u!114 &2081446170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2081446164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acf60f99ba6b4d268579567981b36b2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <MaxHealth>k__BackingField: 10
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
