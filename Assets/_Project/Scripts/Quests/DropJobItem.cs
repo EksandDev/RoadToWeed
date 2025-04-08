@@ -17,6 +17,7 @@ namespace _Project.Scripts.Quests
         {
             LevelPlayerData.IsDoingJob = false;
             JobIsDone?.Invoke();
+            NotificationSender.Send("Ты положил ящик.");
         }
     }
 }

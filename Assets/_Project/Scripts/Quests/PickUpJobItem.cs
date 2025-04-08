@@ -16,6 +16,7 @@ namespace _Project.Scripts.Quests
         public override void Interact()
         {
             LevelPlayerData.IsDoingJob = true;
+            NotificationSender.Send("Ты взял ящик.");
         }
     }
 }
