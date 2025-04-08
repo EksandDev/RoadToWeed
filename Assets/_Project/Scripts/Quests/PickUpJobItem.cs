@@ -17,18 +17,18 @@ namespace _Project.Scripts.Quests
         {
             if (!LevelPlayerData.IsWorker)
             {
-                NotificationSender.Send("Ты не работник.");
+                NotificationSender.Send("Ты не работник");
                 return;
             }
 
             if (LevelPlayerData.IsDoingJob)
             {
-                NotificationSender.Send("Ты уже взял ящик.");
+                NotificationSender.Send("Ты уже взял ящик");
                 return;
             }
             
             LevelPlayerData.IsDoingJob = true;
-            NotificationSender.Send("Ты взял ящик.");
+            NotificationSender.Send("Ты взял ящик");
         }
     }
 }

@@ -24,13 +24,13 @@ namespace _Project.Scripts.Quests
         {
             if (!LevelPlayerData.IsWorker)
             {
-                NotificationSender.Send("Ты не работник.");
+                NotificationSender.Send("Ты не работник");
                 return;
             }
 
             if (!LevelPlayerData.IsDoingJob)
             {
-                NotificationSender.Send("Ты не взял ящик.");
+                NotificationSender.Send("Ты не взял ящик");
                 return; 
             }
             
@@ -41,7 +41,7 @@ namespace _Project.Scripts.Quests
             {
                 _itemsAmount = 0;
                 JobIsDone?.Invoke();
-                NotificationSender.Send($"Всё готово, возвращайся за деньгами.");
+                NotificationSender.Send($"Всё готово, возвращайся за деньгами");
                 return;
             }
                 

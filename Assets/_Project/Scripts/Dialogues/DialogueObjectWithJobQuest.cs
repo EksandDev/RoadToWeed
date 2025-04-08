@@ -44,7 +44,7 @@ namespace _Project.Scripts.Dialogues
                     _levelPlayerData.IsWorker = false;
                     _jobIsDone = false;
                     _wallet.Money += 10;
-                    _notificationSender.Send("Ты получил деньги.");
+                    _notificationSender.Send("Ты получил деньги");
                     return;
                 default:
                     throw new InvalidOperationException();
@@ -60,7 +60,7 @@ namespace _Project.Scripts.Dialogues
                     _dialogueUI.HideAnswers();
                     _dialogueUI.ShowDialogue(_playerReceiveJobDialogue.Text);
                     _levelPlayerData.IsWorker = true;
-                    _notificationSender.Send("Ты принят на работу.");
+                    _notificationSender.Send("Ты принят на работу");
                     return;
                 case 1:
                     _dialogueUI.HideDialogue();

@@ -106,7 +106,7 @@ namespace _Project.Scripts.Player
 
         private void HandleDashInput()
         {
-            if (_isDashing || _dashTimer > 0 || !Input.GetKeyDown(KeyCode.LeftShift)) 
+            if (!CanDash || _isDashing || _dashTimer > 0 || !Input.GetKeyDown(KeyCode.LeftShift)) 
                 return;
 
             _isDashing = true;
@@ -127,7 +127,7 @@ namespace _Project.Scripts.Player
                     break;
             
                 var dashPosition = dashDirection * (_dashDistance / _dashDuration);
-                _rigidbody.MovePosition(_rigidbody.position + (dashPosition * Time.fixedDeltaTime));
+                _rigidbody.MovePosition(_rigidbody.position + dashPosition * Time.fixedDeltaTime);
                 elapsed += Time.deltaTime;
                 yield return null;
             }
@@ -204,7 +204,7 @@ namespace _Project.Scripts.Player
         
             if (_moveDirection.sqrMagnitude > 0.1f)
             {
-                if (!Physics.Raycast(transform.position, _moveDirection, 0.6f))
+                if (!Physics.Raycast(transform.position, _moveDirection, 0.6f, ~6))
                 {
                     var targetVelocity = Vector3.ProjectOnPlane(_moveDirection, _groundNormal).normalized * _moveSpeed;
                     movement = targetVelocity * Time.fixedDeltaTime;
