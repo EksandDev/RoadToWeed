@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace _Project.Scripts.Weed
@@ -5,7 +6,8 @@ namespace _Project.Scripts.Weed
     public class WeedInventorySlotSelector : MonoBehaviour
     {
         private WeedInventorySlot[] _slots;
-        private WeedInventorySlot _selectedSlot;
+
+        public WeedInventorySlot[] Slots => _slots;
 
         public void Initialize(WeedInventorySlot[] slots)
         {
@@ -25,24 +27,30 @@ namespace _Project.Scripts.Weed
                 SelectSlot(1);
                 return;
             }
-            
+
             if (Input.GetKeyDown(KeyCode.Alpha3))
                 SelectSlot(2);
         }
 
-        public void DeselectSelectedSlot()
-        {
-            _selectedSlot.Deselect();
-            _selectedSlot = null;
-        }
-
         private void SelectSlot(int index)
         {
-            if (_selectedSlot)
-                DeselectSelectedSlot();
+            if (!_slots[index].IsReadyToSelect || _slots[index].Weed.Count <= 0)
+            {
+                _slots[index].Weed.ApplyEffect();
+                return;
+            }
 
-            _selectedSlot = _slots[index];
+            _slots[index].IsReadyToSelect = false;
             _slots[index].Select();
+            _slots[index].Weed.ApplyEffect();
+            StartCoroutine(DeselectCoroutine(index, _slots[index].Weed.ActionTime));
+        }
+
+        private IEnumerator DeselectCoroutine(int index, float actionTime)
+        {
+            yield return new WaitForSeconds(actionTime);
+            _slots[index].IsReadyToSelect = true;
+            _slots[index].Deselect();
         }
     }
 }

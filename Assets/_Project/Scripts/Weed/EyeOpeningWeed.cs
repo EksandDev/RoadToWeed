@@ -4,22 +4,30 @@ namespace _Project.Scripts.Weed
     {
         private HiddenItemsController _hiddenItemsController;
         
-        public override void Initialize(WeedDependencies weedDependencies)
+        public override void Initialize(WeedDependencies weedDependencies, WeedScriptableObject data)
         {
             ActionTime = 10;
             CoroutineStarter = weedDependencies.CoroutineStarter;
             NotificationSender = weedDependencies.NotificationSender;
             _hiddenItemsController = weedDependencies.HiddenItemsController;
+            Data = data;
         }
 
         public override void ApplyEffect()
         {
             if (IsReadyToApplyEffect)
             {
+                if (Count <= 0)
+                {
+                    NotificationSender.Send($"{Data.Name} кончился");
+                    return;
+                }
+                
+                Count--;
                 IsReadyToApplyEffect = false;
                 _hiddenItemsController.SetActive(true);
                 CoroutineStarter.StartCoroutine(TimerCoroutine());
-                NotificationSender.Send("Открытие глаз активировано");
+                NotificationSender.Send("Скрытое стало явным");
                 return;
             }
             
@@ -30,7 +38,7 @@ namespace _Project.Scripts.Weed
         {
             IsReadyToApplyEffect = true;
             _hiddenItemsController.SetActive(false);
-            NotificationSender.Send("Открытие глаз прошло");
+            NotificationSender.Send("Занавес вновь опустился");
         }
     }
 }

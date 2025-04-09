@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using _Project.Scripts.Dialogues;
 using _Project.Scripts.Fight;
@@ -6,6 +5,7 @@ using _Project.Scripts.Messages;
 using _Project.Scripts.Other;
 using _Project.Scripts.Player;
 using _Project.Scripts.Quests;
+using _Project.Scripts.Shop;
 using _Project.Scripts.Weed;
 using UnityEngine;
 
@@ -22,9 +22,15 @@ namespace _Project.Scripts.Initialization
         [SerializeField] private DialogueObject[] _dialogueObjects;
         
         [Header("Weed")]
-        [SerializeField] private GameObject[] _hiddenItems;
-        [SerializeField] private WeedInventorySlot[] _weedInventorySlots;
         [SerializeField] private WeedInventorySlotSelector _weedInventorySlotSelector;
+        [SerializeField] private WeedInventorySlot[] _weedInventorySlots;
+        [SerializeField] private WeedScriptableObject[] _weedData;
+        [SerializeField] private GameObject[] _hiddenItems;
+
+        [Header("Shop")] 
+        [SerializeField] private ShopUI _shopUI;
+        [SerializeField] private FindWeedObjectDetector _findWeedObjectDetector;
+        [SerializeField] private ShopButton[] _shopButtons;
         
         [Header("Other")]
         [SerializeField] private CoroutineStarter _coroutineStarter;
@@ -55,35 +61,26 @@ namespace _Project.Scripts.Initialization
             _weeds = new()
             {
                 new EyeOpeningWeed(),
-                new DashWeed(),
-                new DoubleJump()
+                new DashAndDoubleJumpWeed(),
             };
             
-            foreach(var weed in _weeds)
-                weed.Initialize(weedDependencies);
+            for (int i = 0; i < _weedData.Length; i++)
+                _weeds[i].Initialize(weedDependencies, _weedData[i]);
 
             for (int i = 0; i < _weeds.Count; i++)
                 _weedInventorySlots[i].Initialize(_weeds[i]);
             
             _weedInventorySlotSelector.Initialize(_weedInventorySlots);
-        }
+            _shopUI.Initialize(wallet, _playerController);
+            Shop.Shop shop = new(_notificationSender, _weedInventorySlotSelector, wallet);
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            for (var i = 0; i < _shopButtons.Length; i++)
             {
-                _weeds[0].ApplyEffect();
-                return;
+                var button = _shopButtons[i];
+                button.Initialize(shop, _weeds[i]);
             }
             
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                _weeds[1].ApplyEffect();
-                return;
-            }
-            
-            if (Input.GetKeyDown(KeyCode.Alpha3))
-                _weeds[2].ApplyEffect();
+            _findWeedObjectDetector.Initialize(_notificationSender, _weedInventorySlotSelector, shop);
         }
     }
 }

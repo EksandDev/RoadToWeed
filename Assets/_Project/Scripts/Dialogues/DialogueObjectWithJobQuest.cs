@@ -26,7 +26,7 @@ namespace _Project.Scripts.Dialogues
             _notificationSender = dialogueDependencies.NotificationSender;
             _levelPlayerData = dialogueDependencies.LevelPlayerData;
             _wallet = dialogueDependencies.Wallet;
-            _dropJobItem.JobIsDone += () => _jobIsDone = true;
+            _dropJobItem.JobIsDone += OnJobIsDone;
         }
 
         public override void StartDialogue()
@@ -39,9 +39,8 @@ namespace _Project.Scripts.Dialogues
                 case false when _levelPlayerData.IsWorker:
                     _dialogueUI.ShowDialogue(_waitJobIsDoneDialogue.Text);
                     return;
-                case true when _levelPlayerData.IsWorker:
+                case true when !_levelPlayerData.IsWorker:
                     _dialogueUI.ShowDialogue(_jobIsDoneDialogue.Text);
-                    _levelPlayerData.IsWorker = false;
                     _jobIsDone = false;
                     _wallet.Money += 10;
                     _notificationSender.Send("Ты получил деньги");
@@ -67,6 +66,12 @@ namespace _Project.Scripts.Dialogues
                     _dialogueUI.HideAnswers();
                     return;
             }
+        }
+
+        private void OnJobIsDone()
+        {
+            _jobIsDone = true;
+            _levelPlayerData.IsWorker = false;
         }
     }
 }
