@@ -15,8 +15,10 @@ namespace _Project.Scripts.Initialization
     {
         [Header("Player")]
         [SerializeField] private PlayerController _playerController;
+        [SerializeField] private PlayerAttacker _playerAttacker;
         [SerializeField] private PlayerHealth _playerHealth;
-        
+        [SerializeField] private GameObject _hands;
+            
         [Header("Dialogues")]
         [SerializeField] private DialogueUI _dialogueUI;
         [SerializeField] private DialogueObject[] _dialogueObjects;
@@ -42,13 +44,13 @@ namespace _Project.Scripts.Initialization
         private void Start()
         {
             LevelPlayerData levelPlayerData = new();
-            _dialogueUI.Initialize(new());
+            _dialogueUI.Initialize(new(), _playerController, _playerAttacker, _shopUI, _hands);
             Wallet wallet = new();
             HiddenItemsController hiddenItemsController = new(_hiddenItems);
             DialogueDependencies dialogueDependencies = new(_dialogueUI, _notificationSender, levelPlayerData, wallet);
             QuestDependencies questDependencies = new(_notificationSender, levelPlayerData);
             FightDependencies fightDependencies = new(_notificationSender);
-            WeedDependencies weedDependencies = new(_playerController, _coroutineStarter, _notificationSender,
+            WeedDependencies weedDependencies = new(_playerController, _playerAttacker, _coroutineStarter, _notificationSender,
                 hiddenItemsController);
             _playerHealth.Initialize(fightDependencies);
 
@@ -62,6 +64,7 @@ namespace _Project.Scripts.Initialization
             {
                 new EyeOpeningWeed(),
                 new DashAndDoubleJumpWeed(),
+                new FuryWeed()
             };
             
             for (int i = 0; i < _weedData.Length; i++)
@@ -71,7 +74,7 @@ namespace _Project.Scripts.Initialization
                 _weedInventorySlots[i].Initialize(_weeds[i]);
             
             _weedInventorySlotSelector.Initialize(_weedInventorySlots);
-            _shopUI.Initialize(wallet, _playerController);
+            _shopUI.Initialize(wallet, _playerController, _playerAttacker, _weedInventorySlotSelector, _hands);
             Shop.Shop shop = new(_notificationSender, _weedInventorySlotSelector, wallet);
 
             for (var i = 0; i < _shopButtons.Length; i++)

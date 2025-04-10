@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace _Project.Scripts.Shop
 {
@@ -9,6 +10,7 @@ namespace _Project.Scripts.Shop
         [SerializeField] private AudioClip _purchaseSound;
         [SerializeField] private AudioClip _clickSound;
         [SerializeField] private TMP_Text _nameText;
+        [SerializeField] private TMP_Text _priceText;
         [SerializeField] private TMP_Text _descriptionText;
 
         private Shop _shop;
@@ -27,7 +29,9 @@ namespace _Project.Scripts.Shop
             _shop = shop;
             _item = item;
             _nameText.text = _item.Data.Name;
+            _priceText.text = _item.Data.Price + "$";
             _descriptionText.text = _item.Data.Description;
+            GetComponent<Image>().sprite = _item.Data.Icon;
         }
 
         public void OnClick()

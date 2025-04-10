@@ -5,17 +5,29 @@ namespace _Project.Scripts.Weed
 {
     public class WeedInventorySlotSelector : MonoBehaviour
     {
-        private WeedInventorySlot[] _slots;
-
-        public WeedInventorySlot[] Slots => _slots;
+        private bool _isEnabled = true;
+        
+        public WeedInventorySlot[] Slots { get; private set; }
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set
+            {
+                _isEnabled = value;
+                gameObject.SetActive(_isEnabled);
+            }
+        } 
 
         public void Initialize(WeedInventorySlot[] slots)
         {
-            _slots = slots;
+            Slots = slots;
         }
         
         private void Update()
         {
+            if (!IsEnabled)
+                return;
+            
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 SelectSlot(0);
@@ -34,23 +46,23 @@ namespace _Project.Scripts.Weed
 
         private void SelectSlot(int index)
         {
-            if (!_slots[index].IsReadyToSelect || _slots[index].Weed.Count <= 0)
+            if (!Slots[index].IsReadyToSelect || Slots[index].Weed.Count <= 0)
             {
-                _slots[index].Weed.ApplyEffect();
+                Slots[index].Weed.ApplyEffect();
                 return;
             }
 
-            _slots[index].IsReadyToSelect = false;
-            _slots[index].Select();
-            _slots[index].Weed.ApplyEffect();
-            StartCoroutine(DeselectCoroutine(index, _slots[index].Weed.ActionTime));
+            Slots[index].IsReadyToSelect = false;
+            Slots[index].Select();
+            Slots[index].Weed.ApplyEffect();
+            StartCoroutine(DeselectCoroutine(index, Slots[index].Weed.ActionTime));
         }
 
         private IEnumerator DeselectCoroutine(int index, float actionTime)
         {
             yield return new WaitForSeconds(actionTime);
-            _slots[index].IsReadyToSelect = true;
-            _slots[index].Deselect();
+            Slots[index].IsReadyToSelect = true;
+            Slots[index].Deselect();
         }
     }
 }

@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _Project.Scripts.Fight;
 using _Project.Scripts.Player;
+using _Project.Scripts.Shop;
 using TMPro;
 using UnityEngine;
 
@@ -13,36 +15,50 @@ namespace _Project.Scripts.Dialogues
         [SerializeField] private GameObject _answerPopup;
         [SerializeField] private AnswerButton answerButtonPrefab;
         [SerializeField] private TMP_Text _dialogueText;
-        [SerializeField] private PlayerController _playerController;
 
         private TextTyping _textTyping;
         private List<AnswerButton> _spawnedAnswerButtons;
         private Coroutine _typeTextCoroutine;
         private Coroutine _dialogueCoroutine;
         private bool _dialogueIsActive;
+        private PlayerController _playerController;
+        private PlayerAttacker _playerAttacker;
+        private ShopUI _shopUI;
+        private GameObject _hands;
 
-        public void Initialize(TextTyping textTyping)
+        public void Initialize(TextTyping textTyping, PlayerController playerController, PlayerAttacker playerAttacker, 
+            ShopUI shopUI, GameObject hands)
         {
             _textTyping = textTyping;
+            _playerController = playerController;
+            _playerAttacker = playerAttacker;
+            _shopUI = shopUI;
+            _hands = hands;
         }
 
         public void ShowDialogue(string[] dialogueTexts, string[] answers = null, DialogueAndAnswerObject sender = null)
         {
             if (_dialogueIsActive)
                 return;
-            
+
+            _playerAttacker.IsEnabled = false;
             _playerController.IsEnabled = false;
+            _shopUI.IsEnabled = false;
             _dialogueIsActive = true;
             _dialoguePopup.SetActive(true);
+            _hands.SetActive(false);
             _dialogueCoroutine = StartCoroutine(TypeDialogue(dialogueTexts, answers, sender));
         }
 
         public void HideDialogue()
         {
+            _playerAttacker.IsEnabled = true;
             _playerController.IsEnabled = true;
+            _shopUI.IsEnabled = true;
             _dialogueIsActive = false;
             _dialogueText.text = "";
             _dialoguePopup.SetActive(false);
+            _hands.SetActive(true);
             
             if (_typeTextCoroutine != null)
                 StopCoroutine(_typeTextCoroutine);

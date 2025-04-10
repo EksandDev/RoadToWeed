@@ -49,7 +49,7 @@ namespace _Project.Scripts.Shop
                         continue;
                     
                     slot.Weed.Count += purchasedWeed.Value;
-                    _notificationSender.Send($"Подобран {purchasedWeed.Key} в размере {purchasedWeed.Value} штук");
+                    _notificationSender.Send($"Подобран {purchasedWeed.Key} в количестве: {purchasedWeed.Value}");
                 }
             }
             
