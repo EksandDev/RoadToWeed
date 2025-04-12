@@ -16,7 +16,6 @@ namespace _Project.Scripts.Fight
         [SerializeField] private AudioClip _strongAttackIsChargedClip;
 
         private RaycastHit _hit;
-        private AudioSource _audioSource;
         private Coroutine _chargeCoroutine;
         private bool _strongAttackIsReady;
         
@@ -31,7 +30,6 @@ namespace _Project.Scripts.Fight
 
         private void Start()
         {
-            _audioSource = GetComponent<AudioSource>();
             _playerHealth.Died += () => IsEnabled = false;
         }
 
@@ -128,7 +126,7 @@ namespace _Project.Scripts.Fight
             _strongAttackIsReady = true;
             _chargeCoroutine = null;
             _fireParticleSystem.Play();
-            _audioSource.PlayOneShot(_strongAttackIsChargedClip);
+            AudioSource.PlayOneShot(_strongAttackIsChargedClip);
         }
 
         private IEnumerator StrongAttackCoroutine()

@@ -14,10 +14,7 @@ namespace _Project.Scripts.Quests
         
         public override bool CheckReadyToInteract()
         {
-            if (LevelPlayerData.IsWorker && LevelPlayerData.IsDoingJob)
-                return true;
-
-            return false;
+            return LevelPlayerData.IsWorker && LevelPlayerData.IsDoingJob;
         }
 
         public override void Interact()

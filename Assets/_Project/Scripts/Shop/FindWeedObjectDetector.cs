@@ -7,6 +7,7 @@ namespace _Project.Scripts.Shop
 {
     public class FindWeedObjectDetector : MonoBehaviour
     {
+        [SerializeField] private GameObject _findWeedObjectDetectorUI;
         [SerializeField] private Camera _camera;
         [SerializeField] private float _distance;
 
@@ -26,13 +27,21 @@ namespace _Project.Scripts.Shop
         
         private void Update()
         {
-            if (!Physics.Raycast(_camera.transform.position, _camera.transform.forward, out _hit, _distance, ~6)) 
+            if (!Physics.Raycast(_camera.transform.position, _camera.transform.forward, out _hit, _distance, ~6))
+            {
+                if (_findWeedObjectDetectorUI.activeInHierarchy)
+                    _findWeedObjectDetectorUI.SetActive(false);
+                
                 return;
-
-            if (!Input.GetKeyDown(KeyCode.E))
-                return;
+            } 
 
             if (!_hit.transform.TryGetComponent(out FindWeedObject findWeedObject))
+                return;
+            
+            if (!_findWeedObjectDetectorUI.activeInHierarchy) 
+                _findWeedObjectDetectorUI.SetActive(true);
+            
+            if (!Input.GetKeyDown(KeyCode.E))
                 return;
 
             if (_purchasedWeeds == null)

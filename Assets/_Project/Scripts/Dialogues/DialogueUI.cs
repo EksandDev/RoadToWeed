@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace _Project.Scripts.Dialogues
 {
+    [RequireComponent(typeof(AudioSource))]
     public class DialogueUI : MonoBehaviour
     {
         [SerializeField] private GameObject _dialoguePopup;
@@ -16,16 +17,18 @@ namespace _Project.Scripts.Dialogues
         [SerializeField] private AnswerButton answerButtonPrefab;
         [SerializeField] private TMP_Text _dialogueText;
         [SerializeField] private PlayerHealth _playerHealth;
+        [SerializeField] private AudioClip _dialogueSound;
 
         private TextTyping _textTyping;
         private List<AnswerButton> _spawnedAnswerButtons;
         private Coroutine _typeTextCoroutine;
         private Coroutine _dialogueCoroutine;
-        private bool _dialogueIsActive;
         private PlayerController _playerController;
         private PlayerAttacker _playerAttacker;
         private ShopUI _shopUI;
         private GameObject _hands;
+        private AudioSource _audioSource;
+        private bool _dialogueIsActive;
         private bool _isEnabled = true;
 
         public void Initialize(TextTyping textTyping, PlayerController playerController, PlayerAttacker playerAttacker, 
@@ -36,6 +39,7 @@ namespace _Project.Scripts.Dialogues
             _playerAttacker = playerAttacker;
             _shopUI = shopUI;
             _hands = hands;
+            _audioSource = GetComponent<AudioSource>();
             _playerHealth.Died += OnDied;
         }
 
@@ -109,12 +113,16 @@ namespace _Project.Scripts.Dialogues
             _isEnabled = false;
             _dialoguePopup.SetActive(false);
             _answerPopup.SetActive(false);
+            
+            if (_typeTextCoroutine != null)
+                StopCoroutine(_typeTextCoroutine);
         }
 
         private IEnumerator TypeDialogue(string[] dialogueTexts, string[] answers = null, DialogueAndAnswerObject sender = null)
         {
             int index = 1;
-            _typeTextCoroutine = StartCoroutine(_textTyping.TypeText(_dialogueText, dialogueTexts[0]));
+            _typeTextCoroutine = StartCoroutine(_textTyping.TypeText
+                (_dialogueText, dialogueTexts[0], _audioSource, _dialogueSound));
             
             while (true)
             {
@@ -138,7 +146,8 @@ namespace _Project.Scripts.Dialogues
                     yield break;
                 }
                 
-                _typeTextCoroutine = StartCoroutine(_textTyping.TypeText(_dialogueText, dialogueTexts[index]));
+                _typeTextCoroutine = StartCoroutine(_textTyping.TypeText
+                    (_dialogueText, dialogueTexts[index], _audioSource, _dialogueSound));
                 index++;
             }
         }

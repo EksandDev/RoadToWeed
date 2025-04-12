@@ -1,10 +1,11 @@
 using System.Collections;
 using _Project.Scripts.Fight;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Project.Scripts.Player
 {
-    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(CharacterController))]
     public class PlayerController : MonoBehaviour
     {
         [Header("Movement Settings")] 
@@ -12,11 +13,11 @@ namespace _Project.Scripts.Player
 
         [Header("Jump Settings")] 
         [SerializeField] private AnimationCurve _jumpCurve;
-        [SerializeField] private float _jumpHeight = 2f;
+        [SerializeField] private float _jumpHeight = 1f;
         [SerializeField] private float _jumpDuration = 0.5f;
         
         [Header("Ground Check")] 
-        [SerializeField] private float _groundCheckHalfExtends = 0.5f;
+        [SerializeField] private float _groundCheckRadius = 0.5f;
         [SerializeField] private float _groundCheckDistance = 0.2f;
         [SerializeField] private Vector3 _groundCheckOffset = new(0, -0.1f, 0);
         [SerializeField] private LayerMask _groundLayer;
@@ -34,7 +35,8 @@ namespace _Project.Scripts.Player
         [Header("Other")] 
         [SerializeField] private PlayerHealth _playerHealth;
         [SerializeField] private Animator _handsAnimator;
-        
+
+        private CharacterController _characterController;
         private Vector3 _moveDirection;
         private Vector2 _mouseDelta;
         private Vector3 _groundNormal = Vector3.up;
@@ -48,7 +50,7 @@ namespace _Project.Scripts.Player
         private bool _isJumping;
         private bool _doubleJumpUsed;
 
-        private const float _gravity = -2f;
+        private const float _gravity = -9f;
         private const string _isRunningAnimator = "IsRunning";
 
         public bool CanDoubleJump { get; set; } = true;
@@ -57,6 +59,7 @@ namespace _Project.Scripts.Player
 
         private void Awake()
         {
+            _characterController = GetComponent<CharacterController>();
             Cursor.lockState = CursorLockMode.Locked;
             _playerHealth.Died += () => IsEnabled = false;
         }
@@ -129,11 +132,9 @@ namespace _Project.Scripts.Player
 
             while (elapsed < _dashDuration)
             {
-                if (Physics.Raycast(transform.position, dashDirection, 1))
-                    break;
-            
-                var dashPosition = dashDirection * (_dashDistance / _dashDuration);
-                transform.position += dashPosition * Time.deltaTime;
+                var dashSpeed = _dashDistance / _dashDuration;
+                var dashMovement = dashDirection * (dashSpeed * Time.deltaTime);
+                _characterController.Move(dashMovement);
                 elapsed += Time.deltaTime;
                 yield return null;
             }
@@ -147,11 +148,9 @@ namespace _Project.Scripts.Player
         {
             bool wasGrounded = _isGrounded;
             RaycastHit hit;
-            _isGrounded = Physics.BoxCast(
-                transform.position + _groundCheckOffset, 
-                new Vector3(_groundCheckHalfExtends, _groundCheckHalfExtends,_groundCheckHalfExtends), Vector3.down,
-                out hit, transform.rotation, _groundCheckDistance, _groundLayer
-            );
+            _isGrounded = Physics.SphereCast(
+                transform.position + _groundCheckOffset, _groundCheckRadius, Vector3.down,
+                out hit,  _groundCheckDistance, _groundLayer);
 
             if (!_isGrounded)
             {
@@ -195,9 +194,6 @@ namespace _Project.Scripts.Player
             float progress = Mathf.Clamp01(_jumpTimer / _jumpDuration);
             _verticalVelocity = _jumpCurve.Evaluate(progress) * _jumpHeight;
 
-            if (_doubleJumpUsed)
-                _verticalVelocity *= 1.5f;
-
             if (progress >= 1)
                 _isJumping = false;
         }
@@ -209,25 +205,20 @@ namespace _Project.Scripts.Player
 
             var movement = Vector3.zero;
             movement.y = _verticalVelocity * Time.deltaTime;
-    
+
             if (_moveDirection.sqrMagnitude > 0.1f)
             {
                 _handsAnimator.SetBool(_isRunningAnimator, true);
-            
-                if (Physics.Raycast(transform.position, _moveDirection, 0.6f, ~6))
-                {
-                    transform.position += movement;
-                    return;
-                }
-            
-                var targetVelocity = Vector3.ProjectOnPlane(_moveDirection, _groundNormal).normalized * _moveSpeed;
-                movement = new Vector3(targetVelocity.x * Time.deltaTime, movement.y, targetVelocity.z * Time.deltaTime);
-                transform.position += movement;
-                return;
-            }
         
-            transform.position += movement;
-            _handsAnimator.SetBool(_isRunningAnimator, false);
+                var targetVelocity = Vector3.ProjectOnPlane(_moveDirection, _groundNormal).normalized * _moveSpeed;
+                movement.x = targetVelocity.x * Time.deltaTime;
+                movement.z = targetVelocity.z * Time.deltaTime;
+            }
+            
+            else
+                _handsAnimator.SetBool(_isRunningAnimator, false);
+
+            _characterController.Move(movement);
         }
 
         private void ApplyGravity()
@@ -242,7 +233,7 @@ namespace _Project.Scripts.Player
         {
             Gizmos.color = _isGrounded ? Color.green : Color.red;
             var sphereCenter = transform.position + _groundCheckOffset + Vector3.down * _groundCheckDistance;
-            Gizmos.DrawWireCube(sphereCenter, new Vector3(_groundCheckHalfExtends, _groundCheckHalfExtends, _groundCheckHalfExtends));
+            Gizmos.DrawWireSphere(sphereCenter, _groundCheckRadius);
         }
     }
 }
