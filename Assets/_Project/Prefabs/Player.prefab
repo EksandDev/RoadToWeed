@@ -8699,8 +8699,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5020664866885964578}
-  - component: {fileID: 7270021691665508598}
-  - component: {fileID: 8932049773083628334}
   - component: {fileID: 1626216064772733977}
   - component: {fileID: 5185507917178978121}
   - component: {fileID: 1924913992899404648}
@@ -8708,6 +8706,7 @@ GameObject:
   - component: {fileID: 5166837284640217439}
   - component: {fileID: 7398280832382808842}
   - component: {fileID: 5137060347438488380}
+  - component: {fileID: 1510564169755922741}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -8732,54 +8731,6 @@ Transform:
   - {fileID: 3754715035604817166}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &7270021691665508598
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2305719554737160359}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 3
---- !u!65 &8932049773083628334
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2305719554737160359}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.0285645, y: 1.9121399, z: 1.005127}
-  m_Center: {x: 0.0020751953, y: 0.016616821, z: -0.0006713867}
 --- !u!82 &1626216064772733977
 AudioSource:
   m_ObjectHideFlags: 0
@@ -8933,8 +8884,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   _jumpHeight: 4
   _jumpDuration: 0.4
-  _groundCheckHalfExtends: 0.8
-  _groundCheckDistance: 0.55
+  _groundCheckRadius: 0.44
+  _groundCheckDistance: 0.99
   _groundCheckOffset: {x: 0, y: 0.39, z: 0}
   _groundLayer:
     serializedVersion: 2
@@ -8959,6 +8910,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4637ffb56f5b412aa089dc23fa7ed25e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _dialogueObjectDetectorUI: {fileID: 0}
   _camera: {fileID: 6123802960479409150}
   _distance: 2
 --- !u!114 &182672741184670476
@@ -8973,6 +8925,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b05fac910d54baabecb1bd3e0170921, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _jobItemDetectorUI: {fileID: 0}
   _camera: {fileID: 6123802960479409150}
   _distance: 2
 --- !u!114 &5166837284640217439
@@ -8987,6 +8940,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6deba4d5ae2b4684b72b226d1b764eda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _findWeedObjectDetectorUI: {fileID: 0}
   _camera: {fileID: 6123802960479409150}
   _distance: 2
 --- !u!114 &7398280832382808842
@@ -9002,6 +8956,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damage: 1
+  _hitSound: {fileID: 8300000, guid: 1b05508e7ec680144bcea00dd826a8c7, type: 3}
   _distance: 3
   _cooldown: 0.3
   _timeToAttack: 0.3
@@ -9034,18 +8989,18 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 17.974054
-      outSlope: 17.974054
+      value: 0.7
+      inSlope: -0.0698991
+      outSlope: -0.0698991
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 10.014435
-      value: 180
-      inSlope: 17.974054
-      outSlope: 17.974054
+      value: 0
+      inSlope: -0.0698991
+      outSlope: -0.0698991
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -9053,6 +9008,32 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!143 &1510564169755922741
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2305719554737160359}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 1.9
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2306569920423810008
 GameObject:
   m_ObjectHideFlags: 0
