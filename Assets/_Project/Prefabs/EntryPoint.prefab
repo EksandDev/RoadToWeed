@@ -1,0 +1,126 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2368936824575941632
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6936102973633787398}
+  - component: {fileID: 7891145660541499975}
+  - component: {fileID: 2358075902534490973}
+  - component: {fileID: 5898561757369175060}
+  - component: {fileID: 8460130001125357162}
+  m_Layer: 0
+  m_Name: EntryPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6936102973633787398
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2368936824575941632}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 605.5518, y: 401.98477, z: -248.6988}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7891145660541499975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2368936824575941632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebc614b777314864aff9c56f4cff57a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playerController: {fileID: 0}
+  _playerAttacker: {fileID: 0}
+  _playerHealth: {fileID: 0}
+  _hands: {fileID: 0}
+  _dialogueUI: {fileID: 0}
+  _startDialogue: {fileID: 11400000, guid: e02673237ad94c24c86a5f1e7f9d5d82, type: 2}
+  _dialogueObjects:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  _amountOpenedWeed: 3
+  _weedAmountOnStart: 3
+  _weedInventorySlotSelector: {fileID: 0}
+  _weedInventorySlots:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  _weedData:
+  - {fileID: 11400000, guid: 02788d9c392ccfc49a58222abfd86c54, type: 2}
+  - {fileID: 11400000, guid: b220dfe661265d249a8e7be487a9a5df, type: 2}
+  - {fileID: 11400000, guid: cb21ab413293cb24584e76f61e30e14f, type: 2}
+  _hiddenItems:
+  - {fileID: 0}
+  _shopUI: {fileID: 0}
+  _findWeedObjectDetector: {fileID: 0}
+  _shopButtons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  _questController: {fileID: 5898561757369175060}
+  _trailer: {fileID: 0}
+  _coroutineStarter: {fileID: 2358075902534490973}
+  _notificationSender: {fileID: 0}
+  _blackScreen: {fileID: 0}
+  _jobItems:
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &2358075902534490973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2368936824575941632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c19062656a949f0b0b901f893c9ed3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5898561757369175060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2368936824575941632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 823b424576524665b2544dffa63c1be9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _canisters:
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &8460130001125357162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2368936824575941632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7940ab51f744a5ba4038e95f599cc34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemies: []

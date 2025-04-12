@@ -20,9 +20,6 @@ namespace _Project.Scripts.Weed
             get => _count;
             set
             {
-                //if (_count <= 0 || value <= 0)
-                    //throw new InvalidOperationException();
-                
                 _count = value;
                 CountChanged?.Invoke(_count);
             }

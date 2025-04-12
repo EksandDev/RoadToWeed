@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using _Project.Scripts.Dialogues;
 using _Project.Scripts.Fight;
@@ -11,7 +12,7 @@ using UnityEngine;
 
 namespace _Project.Scripts.Initialization
 {
-    public class TestEntryPoint : MonoBehaviour
+    public class LevelEntryPoint : MonoBehaviour
     {
         [Header("Player")]
         [SerializeField] private PlayerController _playerController;
@@ -21,9 +22,12 @@ namespace _Project.Scripts.Initialization
             
         [Header("Dialogues")]
         [SerializeField] private DialogueUI _dialogueUI;
+        [SerializeField] private DialogueWithoutAnswerScriptableObject _startDialogue;
         [SerializeField] private DialogueObject[] _dialogueObjects;
-        
-        [Header("Weed")]
+
+        [Header("Weed")] 
+        [SerializeField] private int _amountOpenedWeed;
+        [SerializeField] private int _weedAmountOnStart;
         [SerializeField] private WeedInventorySlotSelector _weedInventorySlotSelector;
         [SerializeField] private WeedInventorySlot[] _weedInventorySlots;
         [SerializeField] private WeedScriptableObject[] _weedData;
@@ -33,8 +37,10 @@ namespace _Project.Scripts.Initialization
         [SerializeField] private ShopUI _shopUI;
         [SerializeField] private FindWeedObjectDetector _findWeedObjectDetector;
         [SerializeField] private ShopButton[] _shopButtons;
-        
+
         [Header("Other")]
+        [SerializeField] private QuestController _questController;
+        [SerializeField] private Trailer _trailer;
         [SerializeField] private CoroutineStarter _coroutineStarter;
         [SerializeField] private NotificationSender _notificationSender;
         [SerializeField] private BlackScreen _blackScreen;
@@ -61,20 +67,21 @@ namespace _Project.Scripts.Initialization
             foreach (var dialogueObject in _dialogueObjects)
                 dialogueObject.Initialize(dialogueDependencies);
 
-            _weeds = new()
+            _weeds = _amountOpenedWeed switch
             {
-                new EyeOpeningWeed(),
-                new DashAndDoubleJumpWeed(),
-                new FuryWeed()
+                1 => new() { new EyeOpeningWeed() },
+                2 => new() { new EyeOpeningWeed(), new DashAndDoubleJumpWeed() },
+                3 => new() { new EyeOpeningWeed(), new DashAndDoubleJumpWeed(), new FuryWeed() },
+                _ => throw new InvalidOperationException()
             };
-            
+
             for (int i = 0; i < _weedData.Length; i++)
                 _weeds[i].Initialize(weedDependencies, _weedData[i]);
 
             for (int i = 0; i < _weeds.Count; i++)
                 _weedInventorySlots[i].Initialize(_weeds[i]);
             
-            _weedInventorySlotSelector.Initialize(_weedInventorySlots);
+            _weedInventorySlotSelector.Initialize(_weedInventorySlots, _weedAmountOnStart);
             _shopUI.Initialize(wallet, _playerController, _playerAttacker, _weedInventorySlotSelector, _hands);
             Shop.Shop shop = new(_notificationSender, _weedInventorySlotSelector, wallet);
 
@@ -85,6 +92,9 @@ namespace _Project.Scripts.Initialization
             }
             
             _findWeedObjectDetector.Initialize(_notificationSender, _weedInventorySlotSelector, shop);
+            _questController.Initialize(_notificationSender, levelPlayerData);
+            _trailer.Initialize(_notificationSender, levelPlayerData);
+            _dialogueUI.ShowDialogue(_startDialogue.Text);
         }
     }
 }

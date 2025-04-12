@@ -23,7 +23,7 @@ namespace _Project.Scripts.Fight.Enemies
 
         private void Update()
         {
-            if (_isDead)
+            if (_isDead || !Target)
                 return;
             
             if (!Target && _animator.GetBool(_isRunningAnimator))

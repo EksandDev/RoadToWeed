@@ -4,5 +4,7 @@ namespace _Project.Scripts.Player
     {
         public bool IsDoingJob { get; set; } = false;
         public bool IsWorker { get; set; } = false;
+        public bool ReadyToLeave { get; set; } = false;
+        public bool QuestComplete { get; set; } = false;
     }
 }
