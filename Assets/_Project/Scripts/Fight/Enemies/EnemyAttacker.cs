@@ -22,7 +22,7 @@ namespace _Project.Scripts.Fight.Enemies
         private const string _isAttackingAnimator = "IsAttacking";
         private const string _isFightingAnimator = "IsFighting";
 
-        private void Awake()
+        private void Start()
         {
             Enable(_player);
             _enemyHealth.Died += () => _isDied = true;
