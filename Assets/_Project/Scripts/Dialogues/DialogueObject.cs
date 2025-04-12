@@ -6,7 +6,7 @@ namespace _Project.Scripts.Dialogues
     {
         [SerializeField] private Transform _pointToRotatePlayer;
 
-        public abstract void Initialize(DialogueUI dialogueUI);
+        public abstract void Initialize(DialogueDependencies dialogueDependencies);
         public abstract void StartDialogue();
     }
 }

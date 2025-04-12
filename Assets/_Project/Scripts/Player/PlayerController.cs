@@ -1,4 +1,5 @@
 using System.Collections;
+using _Project.Scripts.Fight;
 using UnityEngine;
 
 namespace _Project.Scripts.Player
@@ -6,33 +7,36 @@ namespace _Project.Scripts.Player
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour
     {
-        [Header("Movement Settings")]
+        [Header("Movement Settings")] 
         [SerializeField] private float _moveSpeed = 5f;
-        [SerializeField] private float _maxSlopeAngle = 45f;
-    
-        [Header("Jump Settings")]
+
+        [Header("Jump Settings")] 
         [SerializeField] private AnimationCurve _jumpCurve;
         [SerializeField] private float _jumpHeight = 2f;
         [SerializeField] private float _jumpDuration = 0.5f;
-    
-        [Header("Ground Check")]
-        [SerializeField] private float _groundCheckRadius = 0.5f;
+        
+        [Header("Ground Check")] 
+        [SerializeField] private float _groundCheckHalfExtends = 0.5f;
         [SerializeField] private float _groundCheckDistance = 0.2f;
         [SerializeField] private Vector3 _groundCheckOffset = new(0, -0.1f, 0);
         [SerializeField] private LayerMask _groundLayer;
 
-        [Header("Camera Settings")]
+        [Header("Camera Settings")] 
         [SerializeField] private Transform _cameraTransform;
         [SerializeField] private float _mouseSensitivity = 2f;
         [SerializeField] private float _cameraPitchLimit = 85f;
 
-        [Header("Dash Settings")]
+        [Header("Dash Settings")] 
         [SerializeField] private float _dashDistance = 5f;
         [SerializeField] private float _dashDuration = 0.2f;
         [SerializeField] private float _dashCooldown = 1f;
 
-        private Rigidbody _rigidbody;
+        [Header("Other")] 
+        [SerializeField] private PlayerHealth _playerHealth;
+        [SerializeField] private Animator _handsAnimator;
+        
         private Vector3 _moveDirection;
+        private Vector2 _mouseDelta;
         private Vector3 _groundNormal = Vector3.up;
         private bool _isGrounded;
         private float _cameraPitch;
@@ -43,35 +47,37 @@ namespace _Project.Scripts.Player
         private float _jumpTimer;
         private bool _isJumping;
         private bool _doubleJumpUsed;
-    
+
         private const float _gravity = -2f;
+        private const string _isRunningAnimator = "IsRunning";
 
         public bool CanDoubleJump { get; set; } = true;
-        public bool CanDash { get; set; } = false;
+        public bool CanDash { get; set; } = true;
         public bool IsEnabled { get; set; } = true;
 
         private void Awake()
         {
-            _rigidbody = GetComponent<Rigidbody>();
             Cursor.lockState = CursorLockMode.Locked;
+            _playerHealth.Died += () => IsEnabled = false;
         }
 
         private void Update()
         {
             if (!IsEnabled)
                 return;
-            
+
             HandleCameraRotation();
             HandleMovementInput();
             HandleDashInput();
             HandleJumpInput();
+            
         }
 
         private void FixedUpdate()
         {
             if (!IsEnabled)
                 return;
-            
+
             CheckGround();
             ApplyMovement();
             ApplyGravity();
@@ -79,14 +85,14 @@ namespace _Project.Scripts.Player
 
         private void HandleCameraRotation()
         {
-            var mouseDelta = new Vector2(
+            _mouseDelta = new Vector2(
                 Input.GetAxis("Mouse X"),
                 Input.GetAxis("Mouse Y")
             ) * _mouseSensitivity;
-
-            _cameraPitch = Mathf.Clamp(_cameraPitch - mouseDelta.y, -_cameraPitchLimit, _cameraPitchLimit);
+            
+            _cameraPitch = Mathf.Clamp(_cameraPitch - _mouseDelta.y, -_cameraPitchLimit, _cameraPitchLimit);
             _cameraTransform.localEulerAngles = Vector3.right * _cameraPitch;
-            transform.Rotate(Vector3.up * mouseDelta.x);
+            transform.Rotate(Vector3.up * _mouseDelta.x);
         }
 
         private void HandleMovementInput()
@@ -106,7 +112,7 @@ namespace _Project.Scripts.Player
 
         private void HandleDashInput()
         {
-            if (_isDashing || _dashTimer > 0 || !Input.GetKeyDown(KeyCode.LeftShift)) 
+            if (!CanDash || _isDashing || _dashTimer > 0 || !Input.GetKeyDown(KeyCode.LeftShift)) 
                 return;
 
             _isDashing = true;
@@ -127,7 +133,7 @@ namespace _Project.Scripts.Player
                     break;
             
                 var dashPosition = dashDirection * (_dashDistance / _dashDuration);
-                _rigidbody.MovePosition(_rigidbody.position + (dashPosition * Time.fixedDeltaTime));
+                transform.position += dashPosition * Time.deltaTime;
                 elapsed += Time.deltaTime;
                 yield return null;
             }
@@ -141,9 +147,10 @@ namespace _Project.Scripts.Player
         {
             bool wasGrounded = _isGrounded;
             RaycastHit hit;
-            _isGrounded = Physics.SphereCast(
-                transform.position + _groundCheckOffset, _groundCheckRadius, Vector3.down,
-                out hit, _groundCheckDistance, _groundLayer
+            _isGrounded = Physics.BoxCast(
+                transform.position + _groundCheckOffset, 
+                new Vector3(_groundCheckHalfExtends, _groundCheckHalfExtends,_groundCheckHalfExtends), Vector3.down,
+                out hit, transform.rotation, _groundCheckDistance, _groundLayer
             );
 
             if (!_isGrounded)
@@ -163,7 +170,7 @@ namespace _Project.Scripts.Player
     
         private void HandleJumpInput()
         {
-            if (Input.GetButtonDown("Jump") && (_isGrounded || (CanDoubleJump && !_doubleJumpUsed)))
+            if (Input.GetKeyDown(KeyCode.Space) && (_isGrounded || (CanDoubleJump && !_doubleJumpUsed)))
             {
                 if (!_doubleJumpUsed && !_isGrounded)
                     _doubleJumpUsed = true;
@@ -201,18 +208,26 @@ namespace _Project.Scripts.Player
                 return;
 
             var movement = Vector3.zero;
-        
+            movement.y = _verticalVelocity * Time.deltaTime;
+    
             if (_moveDirection.sqrMagnitude > 0.1f)
             {
-                if (!Physics.Raycast(transform.position, _moveDirection, 0.6f))
+                _handsAnimator.SetBool(_isRunningAnimator, true);
+            
+                if (Physics.Raycast(transform.position, _moveDirection, 0.6f, ~6))
                 {
-                    var targetVelocity = Vector3.ProjectOnPlane(_moveDirection, _groundNormal).normalized * _moveSpeed;
-                    movement = targetVelocity * Time.fixedDeltaTime;
+                    transform.position += movement;
+                    return;
                 }
+            
+                var targetVelocity = Vector3.ProjectOnPlane(_moveDirection, _groundNormal).normalized * _moveSpeed;
+                movement = new Vector3(targetVelocity.x * Time.deltaTime, movement.y, targetVelocity.z * Time.deltaTime);
+                transform.position += movement;
+                return;
             }
         
-            movement.y = _verticalVelocity * Time.fixedDeltaTime;
-            _rigidbody.MovePosition(_rigidbody.position + movement);
+            transform.position += movement;
+            _handsAnimator.SetBool(_isRunningAnimator, false);
         }
 
         private void ApplyGravity()
@@ -227,7 +242,7 @@ namespace _Project.Scripts.Player
         {
             Gizmos.color = _isGrounded ? Color.green : Color.red;
             var sphereCenter = transform.position + _groundCheckOffset + Vector3.down * _groundCheckDistance;
-            Gizmos.DrawWireSphere(sphereCenter, _groundCheckRadius);
+            Gizmos.DrawWireCube(sphereCenter, new Vector3(_groundCheckHalfExtends, _groundCheckHalfExtends, _groundCheckHalfExtends));
         }
     }
 }
