@@ -9,6 +9,7 @@ namespace _Project.Scripts.Fight
         [SerializeField] private float _cooldown;
         [SerializeField] private float _timeToAttack;
         [SerializeField] private float _timeToChargeStrongAttack;
+        [SerializeField] private PlayerHealth _playerHealth;
         [SerializeField] private Camera _camera;
         [SerializeField] private Animator _handsAnimator;
         [SerializeField] private ParticleSystem _fireParticleSystem;
@@ -31,6 +32,7 @@ namespace _Project.Scripts.Fight
         private void Start()
         {
             _audioSource = GetComponent<AudioSource>();
+            _playerHealth.Died += () => IsEnabled = false;
         }
 
         private void Update()

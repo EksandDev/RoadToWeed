@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -24,7 +25,7 @@ namespace _Project.Scripts.Fight.Enemies
         private void Awake()
         {
             Enable(_player);
-            _enemyHealth.PlayerDied += () => _isDied = true;
+            _enemyHealth.Died += () => _isDied = true;
         }
 
         public void Enable(Transform target)
@@ -73,17 +74,27 @@ namespace _Project.Scripts.Fight.Enemies
         private void OnTriggerStay(Collider other)
         {
             if (!_isEnabled || _isDied || !other.TryGetComponent(out PlayerHealth playerHealth))
-            {
-                if (_targetInTrigger)
-                    _targetInTrigger = false;
-                
                 return;
-            }
+            
+            Attack(playerHealth);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!_isEnabled || _isDied || !other.TryGetComponent(out PlayerHealth playerHealth))
+                return;
             
             if (!_targetInTrigger)
                 _targetInTrigger = true;
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (!_isEnabled || _isDied || !other.TryGetComponent(out PlayerHealth playerHealth))
+                return;
             
-            Attack(playerHealth);
+            if (_targetInTrigger)
+                _targetInTrigger = false;
         }
     }
 }

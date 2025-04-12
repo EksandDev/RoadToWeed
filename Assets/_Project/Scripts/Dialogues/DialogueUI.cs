@@ -15,6 +15,7 @@ namespace _Project.Scripts.Dialogues
         [SerializeField] private GameObject _answerPopup;
         [SerializeField] private AnswerButton answerButtonPrefab;
         [SerializeField] private TMP_Text _dialogueText;
+        [SerializeField] private PlayerHealth _playerHealth;
 
         private TextTyping _textTyping;
         private List<AnswerButton> _spawnedAnswerButtons;
@@ -25,6 +26,7 @@ namespace _Project.Scripts.Dialogues
         private PlayerAttacker _playerAttacker;
         private ShopUI _shopUI;
         private GameObject _hands;
+        private bool _isEnabled = true;
 
         public void Initialize(TextTyping textTyping, PlayerController playerController, PlayerAttacker playerAttacker, 
             ShopUI shopUI, GameObject hands)
@@ -34,11 +36,12 @@ namespace _Project.Scripts.Dialogues
             _playerAttacker = playerAttacker;
             _shopUI = shopUI;
             _hands = hands;
+            _playerHealth.Died += OnDied;
         }
 
         public void ShowDialogue(string[] dialogueTexts, string[] answers = null, DialogueAndAnswerObject sender = null)
         {
-            if (_dialogueIsActive)
+            if (_dialogueIsActive || !_isEnabled)
                 return;
 
             _playerAttacker.IsEnabled = false;
@@ -79,6 +82,9 @@ namespace _Project.Scripts.Dialogues
 
         private void ShowAnswers(string[] answers, DialogueAndAnswerObject sender)
         {
+            if (!_isEnabled)
+                return;
+            
             if (answers.Length > 2)
                 throw new InvalidOperationException();
 
@@ -96,6 +102,13 @@ namespace _Project.Scripts.Dialogues
                 spawnedAnswerPanel.Text.text = answers[i];
                 _spawnedAnswerButtons.Add(spawnedAnswerPanel); 
             }
+        }
+
+        private void OnDied()
+        {
+            _isEnabled = false;
+            _dialoguePopup.SetActive(false);
+            _answerPopup.SetActive(false);
         }
 
         private IEnumerator TypeDialogue(string[] dialogueTexts, string[] answers = null, DialogueAndAnswerObject sender = null)

@@ -1,23 +1,33 @@
 using System;
+using System.Collections;
 using _Project.Scripts.Messages;
+using _Project.Scripts.Other;
+using DG.Tweening;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 namespace _Project.Scripts.Fight
 {
     public class PlayerHealth : MonoBehaviour, IDamageable
     {
+        [SerializeField] private Camera _camera;
+        [SerializeField] private Transform _onDeathCameraPoint;
+        [SerializeField] private GameObject _deathUI;
         [field: SerializeField] public float MaxHealth { get; private set; }
+        public event Action Died;
 
         private NotificationSender _notificationSender;
+        private GameObject _hands;
+        private BlackScreen _blackScreen;
         
         public float Health { get; private set; }
 
-        public void Initialize(FightDependencies fightDependencies)
+        public void Initialize(FightDependencies fightDependencies, GameObject hands, BlackScreen blackScreen)
         {
-            _notificationSender = fightDependencies.NotificationSender;
             Health = MaxHealth;
+            _notificationSender = fightDependencies.NotificationSender;
+            _hands = hands;
+            _blackScreen = blackScreen;
         }
 
         public void TakeDamage(float value)
@@ -37,7 +47,9 @@ namespace _Project.Scripts.Fight
 
         private void Die()
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            Died?.Invoke();
+            _hands.SetActive(false);
+            StartCoroutine(DieCoroutine());
         }
 
         private void NotifyAboutDamage()
@@ -67,6 +79,16 @@ namespace _Project.Scripts.Fight
 
             if (text != "")
                 _notificationSender.Send(text);
+        }
+
+        private IEnumerator DieCoroutine()
+        {
+            _camera.transform.DOMove(_onDeathCameraPoint.position, 1);
+            _camera.transform.DORotateQuaternion(_onDeathCameraPoint.rotation, 1);
+            _blackScreen.Enable();
+            yield return new WaitForSeconds(_blackScreen.AnimationTime);
+            _deathUI.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
         }
     }
 }

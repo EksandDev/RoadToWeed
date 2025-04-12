@@ -12,7 +12,7 @@ namespace _Project.Scripts.Fight.Enemies
         private Collider _collider;
         private bool _isDead;
         
-        public event Action PlayerDied;
+        public event Action Died;
         
         private const string _isDeadAnimator = "IsDead";
         
@@ -44,7 +44,7 @@ namespace _Project.Scripts.Fight.Enemies
             _isDead = true;
             _collider.enabled = false;
             _animator.SetBool(_isDeadAnimator, true);
-            PlayerDied?.Invoke();
+            Died?.Invoke();
         }
     }
 }

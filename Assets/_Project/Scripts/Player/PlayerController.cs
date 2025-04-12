@@ -1,4 +1,5 @@
 using System.Collections;
+using _Project.Scripts.Fight;
 using UnityEngine;
 
 namespace _Project.Scripts.Player
@@ -8,7 +9,6 @@ namespace _Project.Scripts.Player
     {
         [Header("Movement Settings")] 
         [SerializeField] private float _moveSpeed = 5f;
-        [SerializeField] private float _maxSlopeAngle = 45f;
 
         [Header("Jump Settings")] 
         [SerializeField] private AnimationCurve _jumpCurve;
@@ -32,9 +32,9 @@ namespace _Project.Scripts.Player
         [SerializeField] private float _dashCooldown = 1f;
 
         [Header("Other")] 
+        [SerializeField] private PlayerHealth _playerHealth;
         [SerializeField] private Animator _handsAnimator;
-
-        private Rigidbody _rigidbody;
+        
         private Vector3 _moveDirection;
         private Vector2 _mouseDelta;
         private Vector3 _groundNormal = Vector3.up;
@@ -57,8 +57,8 @@ namespace _Project.Scripts.Player
 
         private void Awake()
         {
-            _rigidbody = GetComponent<Rigidbody>();
             Cursor.lockState = CursorLockMode.Locked;
+            _playerHealth.Died += () => IsEnabled = false;
         }
 
         private void Update()

@@ -18,7 +18,7 @@ namespace _Project.Scripts.Fight.Enemies
         private void Start()
         {
             Agent = GetComponent<NavMeshAgent>();
-            _enemyHealth.PlayerDied += OnPlayerDead;
+            _enemyHealth.Died += OnDead;
         }
 
         private void Update()
@@ -41,7 +41,7 @@ namespace _Project.Scripts.Fight.Enemies
                 _animator.SetBool(_isRunningAnimator, false);
         }
 
-        private void OnPlayerDead()
+        private void OnDead()
         {
             _isDead = true;
             Agent.isStopped = true;

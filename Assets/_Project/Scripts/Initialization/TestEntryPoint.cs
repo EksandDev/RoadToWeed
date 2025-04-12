@@ -37,6 +37,7 @@ namespace _Project.Scripts.Initialization
         [Header("Other")]
         [SerializeField] private CoroutineStarter _coroutineStarter;
         [SerializeField] private NotificationSender _notificationSender;
+        [SerializeField] private BlackScreen _blackScreen;
         [SerializeField] private JobItem[] _jobItems;
 
         private List<Weed.Weed> _weeds;
@@ -52,7 +53,7 @@ namespace _Project.Scripts.Initialization
             FightDependencies fightDependencies = new(_notificationSender);
             WeedDependencies weedDependencies = new(_playerController, _playerAttacker, _coroutineStarter, _notificationSender,
                 hiddenItemsController);
-            _playerHealth.Initialize(fightDependencies);
+            _playerHealth.Initialize(fightDependencies, _hands, _blackScreen);
 
             foreach (var jobItem in _jobItems)
                 jobItem.Initialize(questDependencies);

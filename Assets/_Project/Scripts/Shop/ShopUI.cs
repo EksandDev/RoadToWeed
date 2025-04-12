@@ -8,6 +8,7 @@ namespace _Project.Scripts.Shop
 {
     public class ShopUI : MonoBehaviour
     {
+        [SerializeField] private PlayerHealth _playerHealth;
         [SerializeField] private GameObject _panel;
         [SerializeField] private TMP_Text _moneyText;
 
@@ -29,8 +30,9 @@ namespace _Project.Scripts.Shop
             _hands = hands;
             _moneyText.text = wallet.Money + "$";
             _wallet.MoneyChanged += i => _moneyText.text = i + "$";
+            _playerHealth.Died += OnDied;
         }
-        
+
         private void Update()
         {
             if (!IsEnabled)
@@ -58,9 +60,10 @@ namespace _Project.Scripts.Shop
             _weedInventorySlotSelector.IsEnabled = false;
         }
         
-        private void OnDisable()
+        private void OnDied()
         {
-            _wallet.MoneyChanged -= i => _moneyText.text = i.ToString();
+            _panel.SetActive(false);
+            IsEnabled = false;
         }
     }
 }
