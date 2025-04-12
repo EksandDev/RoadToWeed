@@ -4,6 +4,7 @@ using _Project.Scripts.Messages;
 using _Project.Scripts.Other;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace _Project.Scripts.Fight
@@ -13,12 +14,16 @@ namespace _Project.Scripts.Fight
         [SerializeField] private Camera _camera;
         [SerializeField] private Transform _onDeathCameraPoint;
         [SerializeField] private GameObject _deathUI;
+        [SerializeField] private Image _bloodOverlay; 
         [field: SerializeField] public float MaxHealth { get; private set; }
+        [SerializeField] private AnimationCurve _bloodOverlayAlphaCurve;
+        
         public event Action Died;
 
         private NotificationSender _notificationSender;
         private GameObject _hands;
         private BlackScreen _blackScreen;
+        private Coroutine _regenerationCoroutine;
         
         public float Health { get; private set; }
 
@@ -35,8 +40,13 @@ namespace _Project.Scripts.Fight
             if (Health <= 0 || value <= 0)
                 return;
 
+            if (_regenerationCoroutine != null)
+                StopCoroutine(_regenerationCoroutine);
+            
+            
             Health -= value;
             NotifyAboutDamage();
+            StartCoroutine(RegenerationHealthCoroutine());
             
             if (Health < 0)
                 Health = 0;
@@ -89,6 +99,18 @@ namespace _Project.Scripts.Fight
             yield return new WaitForSeconds(_blackScreen.AnimationTime);
             _deathUI.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
+        }
+
+        private IEnumerator RegenerationHealthCoroutine()
+        {
+            yield return new WaitForSeconds(10);
+            _notificationSender.Send("Мне становится лучше");
+            
+            while (Health < MaxHealth)
+            {
+                yield return new WaitForSeconds(1);
+                Health++;
+            }
         }
     }
 }
