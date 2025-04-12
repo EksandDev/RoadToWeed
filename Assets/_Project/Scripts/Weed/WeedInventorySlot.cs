@@ -47,10 +47,5 @@ namespace _Project.Scripts.Weed
             else if (!_parent.activeInHierarchy)
                 _parent.SetActive(true);
         }
-
-        private void OnDisable()
-        {
-            Weed.CountChanged -= OnWeedCountChanged;
-        }
     }
 }

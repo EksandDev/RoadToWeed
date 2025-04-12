@@ -18,9 +18,12 @@ namespace _Project.Scripts.Weed
             }
         } 
 
-        public void Initialize(WeedInventorySlot[] slots)
+        public void Initialize(WeedInventorySlot[] slots, int weedAmountOnStart)
         {
             Slots = slots;
+
+            foreach (var slot in Slots)
+                slot.Weed.Count = weedAmountOnStart;
         }
         
         private void Update()

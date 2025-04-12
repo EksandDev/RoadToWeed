@@ -17,6 +17,7 @@ namespace _Project.Scripts.Fight.Enemies
         private const string _isDeadAnimator = "IsDead";
         
         public float Health { get; private set; }
+        public bool IsEnabled { get; set; } = false;
 
         private void Awake()
         {
@@ -26,7 +27,7 @@ namespace _Project.Scripts.Fight.Enemies
 
         public void TakeDamage(float value)
         {
-            if (_isDead || Health <= 0 || value <= 0)
+            if (_isDead || Health <= 0 || value <= 0 || !IsEnabled)
                 return;
 
             Health -= value;
