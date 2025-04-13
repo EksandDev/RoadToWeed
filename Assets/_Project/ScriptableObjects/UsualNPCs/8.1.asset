@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3960975068b348d18c7b8731a8949e91, type: 3}
-  m_Name: 6.2
+  m_Name: 8.1
   m_EditorClassIdentifier: 
   <Text>k__BackingField:
-  - "\u0443-\u0445\u0443-\u0445\u0443) \u042F \u0441\u043C\u0435\u0448\u0430\u043B
-    \u0432\u0441\u044E \u043E\u0442\u0440\u0430\u0432\u0443)"
+  - "\u041E\u043D\u0418 \u043F\u0415\u0440\u0415\u043A\u0420\u044B\u041B\u0438 \u0414\u043E\u0420\u0433\u0423"
+  - "\u0414\u0430\u043B\u044C\u0428\u0435 \u041D\u0435\u041F\u0440\u041E\u0435\u0425\u0430\u0422\u044C"
