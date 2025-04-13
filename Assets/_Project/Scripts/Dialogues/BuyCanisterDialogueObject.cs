@@ -10,12 +10,12 @@ namespace _Project.Scripts.Dialogues
         [SerializeField] private DialogueWithoutAnswerScriptableObject _afterPurchaseDialogue;
         [SerializeField] private GameObject _canisterOnFloor;
         [SerializeField] private GameObject _canisterInHand;
-        
+
         private DialogueUI _dialogueUI;
         private NotificationSender _notificationSender;
         private Wallet _wallet;
         private bool _afterPurchase;
-        
+
         public override void Initialize(DialogueDependencies dialogueDependencies)
         {
             _dialogueUI = dialogueDependencies.DialogueUI;
@@ -30,7 +30,7 @@ namespace _Project.Scripts.Dialogues
                 _dialogueUI.ShowDialogue(_afterPurchaseDialogue.Text);
                 return;
             }
-            
+
             _dialogueUI.ShowDialogue(_canisterQuestionDialogue.Text, _canisterQuestionDialogue.PlayerAnswers, this);
         }
 

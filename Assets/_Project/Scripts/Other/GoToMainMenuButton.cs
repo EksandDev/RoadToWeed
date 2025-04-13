@@ -7,7 +7,7 @@ namespace _Project.Scripts.Fight
     {
         public void OnClick()
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene(0);
         }
     }
 }

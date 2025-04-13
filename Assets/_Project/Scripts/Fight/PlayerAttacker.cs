@@ -29,7 +29,7 @@ namespace _Project.Scripts.Fight
         private const string _isStrongAttackingAnimator = "IsStrongAttacking";
 
         public bool IsEnabled { get; set; } = true;
-        public bool CanStrongAttack { get; set; } = true;
+        public bool CanStrongAttack { get; set; }
 
         private void Start()
         {

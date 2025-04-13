@@ -55,8 +55,8 @@ namespace _Project.Scripts.Player
         private const float _gravity = -9f;
         private const string _isRunningAnimator = "IsRunning";
 
-        public bool CanDoubleJump { get; set; } = true;
-        public bool CanDash { get; set; } = true;
+        public bool CanDoubleJump { get; set; }
+        public bool CanDash { get; set; }
         public bool IsEnabled { get; set; } = true;
 
         private void Awake()
