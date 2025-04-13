@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Project.Scripts.Fight
 {
@@ -13,10 +14,11 @@ namespace _Project.Scripts.Fight
         [SerializeField] private Camera _camera;
         [SerializeField] private Animator _handsAnimator;
         [SerializeField] private ParticleSystem _fireParticleSystem;
-        [SerializeField] private AudioClip _strongAttackIsChargedClip;
+        [SerializeField] private AudioClip _strongAttackIsChargedSound;
+        [SerializeField] private AudioClip _fistWhooshSound;
 
-        private RaycastHit _hit;
         private AudioSource _audioSource;
+        private RaycastHit _hit;
         private Coroutine _chargeCoroutine;
         private bool _strongAttackIsReady;
         
@@ -27,7 +29,7 @@ namespace _Project.Scripts.Fight
         private const string _isStrongAttackingAnimator = "IsStrongAttacking";
 
         public bool IsEnabled { get; set; } = true;
-        public bool CanStrongAttack { get; set; } = true;
+        public bool CanStrongAttack { get; set; }
 
         private void Start()
         {
@@ -61,6 +63,7 @@ namespace _Project.Scripts.Fight
             if (!ReadyToAttack || !Input.GetMouseButtonDown(0))
                 return;
             
+            _audioSource.PlayOneShot(_fistWhooshSound);
             StartCoroutine(AttackCoroutine());
         }
 
@@ -80,6 +83,7 @@ namespace _Project.Scripts.Fight
                 
                 if (_strongAttackIsReady)
                 {
+                    _audioSource.PlayOneShot(_fistWhooshSound);
                     StartCoroutine(StrongAttackCoroutine());
                     return;
                 }
@@ -128,7 +132,7 @@ namespace _Project.Scripts.Fight
             _strongAttackIsReady = true;
             _chargeCoroutine = null;
             _fireParticleSystem.Play();
-            _audioSource.PlayOneShot(_strongAttackIsChargedClip);
+            AudioSource.PlayOneShot(_strongAttackIsChargedSound);
         }
 
         private IEnumerator StrongAttackCoroutine()

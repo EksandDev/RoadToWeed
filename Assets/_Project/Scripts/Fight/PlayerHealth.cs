@@ -24,8 +24,21 @@ namespace _Project.Scripts.Fight
         private GameObject _hands;
         private BlackScreen _blackScreen;
         private Coroutine _regenerationCoroutine;
-        
-        public float Health { get; private set; }
+        private float _health;
+        private bool _isDead;
+
+        public float Health
+        {
+            get => _health;
+            private set
+            {
+                _health = value;
+                var color = _bloodOverlay.color;
+                color.a = _bloodOverlayAlphaCurve.Evaluate(Health);
+                _bloodOverlay.color = color;
+            }
+            
+        }
 
         public void Initialize(FightDependencies fightDependencies, GameObject hands, BlackScreen blackScreen)
         {
@@ -46,7 +59,7 @@ namespace _Project.Scripts.Fight
             
             Health -= value;
             NotifyAboutDamage();
-            StartCoroutine(RegenerationHealthCoroutine());
+            _regenerationCoroutine = StartCoroutine(RegenerationHealthCoroutine());
             
             if (Health < 0)
                 Health = 0;
@@ -57,6 +70,7 @@ namespace _Project.Scripts.Fight
 
         private void Die()
         {
+            _isDead = true;
             Died?.Invoke();
             _hands.SetActive(false);
             StartCoroutine(DieCoroutine());
@@ -106,7 +120,7 @@ namespace _Project.Scripts.Fight
             yield return new WaitForSeconds(10);
             _notificationSender.Send("Мне становится лучше");
             
-            while (Health < MaxHealth)
+            while (Health < MaxHealth && !_isDead)
             {
                 yield return new WaitForSeconds(1);
                 Health++;

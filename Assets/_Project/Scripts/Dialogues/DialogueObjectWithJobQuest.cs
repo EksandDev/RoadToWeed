@@ -42,7 +42,7 @@ namespace _Project.Scripts.Dialogues
                 case true when !_levelPlayerData.IsWorker:
                     _dialogueUI.ShowDialogue(_jobIsDoneDialogue.Text);
                     _jobIsDone = false;
-                    _wallet.Money += 10;
+                    _wallet.Money += 20;
                     _notificationSender.Send("Ты получил деньги");
                     return;
                 default:

@@ -6,7 +6,7 @@ namespace _Project.Scripts.Weed
         
         public override void Initialize(WeedDependencies weedDependencies, WeedScriptableObject data)
         {
-            ActionTime = 10;
+            ActionTime = 20;
             CoroutineStarter = weedDependencies.CoroutineStarter;
             NotificationSender = weedDependencies.NotificationSender;
             _hiddenItemsController = weedDependencies.HiddenItemsController;

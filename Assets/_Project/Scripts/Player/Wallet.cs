@@ -5,8 +5,8 @@ namespace _Project.Scripts.Player
     public class Wallet
     {
         public event Action<int> MoneyChanged;
-        
-        private int _money = 100;
+
+        private int _money;
         
         public int Money
         {

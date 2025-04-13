@@ -12,6 +12,7 @@ namespace _Project.Scripts.Fight.Enemies
         [SerializeField] private Animator _animator;
         [SerializeField] private float _cooldown = 1f;
         [SerializeField] private float _timeToAttack = 1.04f;
+        [SerializeField] private bool _enableOnStart;
 
         private bool _isReadyToAttack = true;
         private bool _isEnabled;
@@ -22,9 +23,14 @@ namespace _Project.Scripts.Fight.Enemies
         private const string _isAttackingAnimator = "IsAttacking";
         private const string _isFightingAnimator = "IsFighting";
 
-        private void Awake()
+        private void Start()
         {
-            Enable(_player);
+            if (_enableOnStart)
+            {
+                Enable(_player);
+                _enemyHealth.IsEnabled = true;
+            }
+            
             _enemyHealth.Died += () => _isDied = true;
         }
 
@@ -32,6 +38,7 @@ namespace _Project.Scripts.Fight.Enemies
         {
             _isEnabled = true;
             _enemyMover.Target = target;
+            _enemyHealth.IsEnabled = true;
             _animator.SetBool(_isFightingAnimator, true);
         }
 
