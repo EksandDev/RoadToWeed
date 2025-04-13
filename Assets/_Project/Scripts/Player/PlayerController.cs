@@ -35,8 +35,10 @@ namespace _Project.Scripts.Player
         [Header("Other")] 
         [SerializeField] private PlayerHealth _playerHealth;
         [SerializeField] private Animator _handsAnimator;
+        [SerializeField] private AudioClip _dashAndDoubleJumpSound;
 
         private CharacterController _characterController;
+        private AudioSource _audioSource;
         private Vector3 _moveDirection;
         private Vector2 _mouseDelta;
         private Vector3 _groundNormal = Vector3.up;
@@ -60,6 +62,7 @@ namespace _Project.Scripts.Player
         private void Awake()
         {
             _characterController = GetComponent<CharacterController>();
+            _audioSource = GetComponent<AudioSource>();
             Cursor.lockState = CursorLockMode.Locked;
             _playerHealth.Died += () => IsEnabled = false;
         }
@@ -120,6 +123,7 @@ namespace _Project.Scripts.Player
 
             _isDashing = true;
             _dashTimer = _dashCooldown;
+            _audioSource.PlayOneShot(_dashAndDoubleJumpSound);
             StartCoroutine(DashCoroutine());
         }
 
@@ -172,7 +176,10 @@ namespace _Project.Scripts.Player
             if (Input.GetKeyDown(KeyCode.Space) && (_isGrounded || (CanDoubleJump && !_doubleJumpUsed)))
             {
                 if (!_doubleJumpUsed && !_isGrounded)
+                {
                     _doubleJumpUsed = true;
+                    _audioSource.PlayOneShot(_dashAndDoubleJumpSound);
+                }
             
                 StartJump();
             }

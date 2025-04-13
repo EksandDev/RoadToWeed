@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using _Project.Scripts.Dialogues;
 using _Project.Scripts.Fight;
@@ -12,6 +13,7 @@ using UnityEngine;
 
 namespace _Project.Scripts.Initialization
 {
+    [RequireComponent(typeof(AudioSource))]
     public class LevelEntryPoint : MonoBehaviour
     {
         [Header("Player")]
@@ -47,9 +49,11 @@ namespace _Project.Scripts.Initialization
         [SerializeField] private JobItem[] _jobItems;
 
         private List<Weed.Weed> _weeds;
+        private AudioSource _audioSource;
         
         private void Start()
         {
+            _audioSource = GetComponent<AudioSource>();
             LevelPlayerData levelPlayerData = new();
             _dialogueUI.Initialize(new(), _playerController, _playerAttacker, _shopUI, _hands);
             Wallet wallet = new();
@@ -94,7 +98,10 @@ namespace _Project.Scripts.Initialization
             _findWeedObjectDetector.Initialize(_notificationSender, _weedInventorySlotSelector, shop);
             _questController.Initialize(_notificationSender, levelPlayerData);
             _trailer.Initialize(_notificationSender, levelPlayerData);
+            _blackScreen.Enable(false);
+            _blackScreen.Disable();
             _dialogueUI.ShowDialogue(_startDialogue.Text);
+            _audioSource.Play();
         }
     }
 }

@@ -8704,6 +8704,8 @@ GameObject:
   - component: {fileID: 1924913992899404648}
   - component: {fileID: 182672741184670476}
   - component: {fileID: 5166837284640217439}
+  - component: {fileID: 7824817719282079468}
+  - component: {fileID: 5420317664254915320}
   - component: {fileID: 7398280832382808842}
   - component: {fileID: 5137060347438488380}
   - component: {fileID: 1510564169755922741}
@@ -8895,9 +8897,11 @@ MonoBehaviour:
   _cameraPitchLimit: 85
   _dashDistance: 3
   _dashDuration: 0.2
-  _dashCooldown: 1
+  _dashCooldown: 2
   _playerHealth: {fileID: 5137060347438488380}
   _handsAnimator: {fileID: 7507687453077203301}
+  _dashAndDoubleJumpSound: {fileID: 8300000, guid: c4caee30a932b67489d4a1aa2e1c0188,
+    type: 3}
 --- !u!114 &1924913992899404648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8943,6 +8947,36 @@ MonoBehaviour:
   _findWeedObjectDetectorUI: {fileID: 0}
   _camera: {fileID: 6123802960479409150}
   _distance: 2
+--- !u!114 &7824817719282079468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2305719554737160359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a92e1a7e4f34a51bb043c1037793c6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _canisterDetectorUI: {fileID: 0}
+  _camera: {fileID: 6123802960479409150}
+  _distance: 2
+--- !u!114 &5420317664254915320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2305719554737160359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca85dc593f354617b8d79aa2d7614659, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _trailerDetectorUI: {fileID: 0}
+  _camera: {fileID: 6123802960479409150}
+  _distance: 2
 --- !u!114 &7398280832382808842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8965,8 +8999,9 @@ MonoBehaviour:
   _camera: {fileID: 6123802960479409150}
   _handsAnimator: {fileID: 7507687453077203301}
   _fireParticleSystem: {fileID: 5116484815491029700}
-  _strongAttackIsChargedClip: {fileID: 8300000, guid: 67cbcb6ee6b226a45af4f5029ad553a3,
+  _strongAttackIsChargedSound: {fileID: 8300000, guid: 67cbcb6ee6b226a45af4f5029ad553a3,
     type: 3}
+  _fistWhooshSound: {fileID: 8300000, guid: 7b2fc443f75a9464dbe7bd0271d80149, type: 3}
 --- !u!114 &5137060347438488380
 MonoBehaviour:
   m_ObjectHideFlags: 0

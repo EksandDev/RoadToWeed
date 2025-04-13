@@ -1,3 +1,5 @@
+using System;
+using _Project.Scripts.Quests;
 using UnityEngine;
 
 namespace _Project.Scripts.Dialogues

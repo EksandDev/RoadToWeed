@@ -15,14 +15,30 @@ namespace _Project.Scripts.Other
             _blackScreenImage = GetComponent<Image>();
         }
 
-        public void Enable()
+        public void Enable(bool needAnimation = true)
         {
-            _blackScreenImage.DOFade(1, AnimationTime);
+            if (needAnimation)
+            {
+                _blackScreenImage.DOFade(1, AnimationTime);
+                return;
+            }
+
+            var newColor = _blackScreenImage.color;
+            newColor.a = 1;
+            _blackScreenImage.color = newColor;
         }
 
-        public void Disable()
+        public void Disable(bool needAnimation = true)
         {
-            _blackScreenImage.DOFade(0, AnimationTime);
+            if (needAnimation)
+            {
+                _blackScreenImage.DOFade(0, AnimationTime);
+                return;
+            }
+            
+            var newColor = _blackScreenImage.color;
+            newColor.a = 0;
+            _blackScreenImage.color = newColor;
         }
     }
 }

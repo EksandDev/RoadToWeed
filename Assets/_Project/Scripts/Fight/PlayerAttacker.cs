@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Project.Scripts.Fight
 {
@@ -13,8 +14,10 @@ namespace _Project.Scripts.Fight
         [SerializeField] private Camera _camera;
         [SerializeField] private Animator _handsAnimator;
         [SerializeField] private ParticleSystem _fireParticleSystem;
-        [SerializeField] private AudioClip _strongAttackIsChargedClip;
+        [SerializeField] private AudioClip _strongAttackIsChargedSound;
+        [SerializeField] private AudioClip _fistWhooshSound;
 
+        private AudioSource _audioSource;
         private RaycastHit _hit;
         private Coroutine _chargeCoroutine;
         private bool _strongAttackIsReady;
@@ -30,6 +33,7 @@ namespace _Project.Scripts.Fight
 
         private void Start()
         {
+            _audioSource = GetComponent<AudioSource>();
             _playerHealth.Died += () => IsEnabled = false;
         }
 
@@ -59,6 +63,7 @@ namespace _Project.Scripts.Fight
             if (!ReadyToAttack || !Input.GetMouseButtonDown(0))
                 return;
             
+            _audioSource.PlayOneShot(_fistWhooshSound);
             StartCoroutine(AttackCoroutine());
         }
 
@@ -78,6 +83,7 @@ namespace _Project.Scripts.Fight
                 
                 if (_strongAttackIsReady)
                 {
+                    _audioSource.PlayOneShot(_fistWhooshSound);
                     StartCoroutine(StrongAttackCoroutine());
                     return;
                 }
@@ -126,7 +132,7 @@ namespace _Project.Scripts.Fight
             _strongAttackIsReady = true;
             _chargeCoroutine = null;
             _fireParticleSystem.Play();
-            AudioSource.PlayOneShot(_strongAttackIsChargedClip);
+            AudioSource.PlayOneShot(_strongAttackIsChargedSound);
         }
 
         private IEnumerator StrongAttackCoroutine()
