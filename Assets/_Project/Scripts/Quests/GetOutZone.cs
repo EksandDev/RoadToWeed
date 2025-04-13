@@ -9,10 +9,12 @@ namespace _Project.Scripts.Quests
         
         private void OnTriggerEnter(Collider other)
         {
-            if (!other.TryGetComponent(out PlayerController playerController))
+            if (!other.TryGetComponent(out CharacterController characterController))
                 return;
 
-            playerController.transform.position = _pointToTeleport.position;
+            characterController.enabled = false;
+            characterController.transform.position = _pointToTeleport.position;
+            characterController.enabled = true;
         }
     }
 }

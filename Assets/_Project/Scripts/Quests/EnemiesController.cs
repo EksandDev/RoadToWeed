@@ -9,6 +9,7 @@ namespace _Project.Scripts.Quests
     public class EnemiesController : QuestController
     {
         [SerializeField] private EnemyHealth[] _enemies;
+        [SerializeField] private GameObject[] _objectsWillHide;
 
         private int _diedEnemies;
         private NotificationSender _notificationSender;
@@ -31,6 +32,10 @@ namespace _Project.Scripts.Quests
             {
                 _levelPlayerData.ReadyToLeave = true;
                 _notificationSender.Send($"Отбросы раскиданы, можно уезжать");
+
+                foreach (var item in _objectsWillHide)
+                    item.SetActive(false);
+                
                 return;
             }
             

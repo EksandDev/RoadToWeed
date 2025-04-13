@@ -38,6 +38,7 @@ namespace _Project.Scripts.Fight.Enemies
         {
             _isEnabled = true;
             _enemyMover.Target = target;
+            _enemyHealth.IsEnabled = true;
             _animator.SetBool(_isFightingAnimator, true);
         }
 
